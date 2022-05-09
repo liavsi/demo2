@@ -357,5 +357,5 @@ int treeSize(TreeNode* root)
 }
 void checkIfWorks(int shit)
 {
-    printf("please");
+    printf("do not work");
 }
