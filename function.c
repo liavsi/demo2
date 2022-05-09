@@ -335,7 +335,6 @@ Musician** createMusiciansQ4(Musician** MusiciansGroup,int musiArrSize,int insId
     return res;
 
 }
-
 int isPlaying(Musician* player, int insId)
 {
     MPIlistNode* curr;
@@ -355,4 +354,8 @@ int treeSize(TreeNode* root)
         return 0;
     else
         return 1 + treeSize(root->left) + treeSize(root->right);
+}
+void checkIfWorks(int shit)
+{
+    printf("please");
 }
