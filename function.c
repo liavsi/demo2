@@ -402,7 +402,7 @@ void makeEmptyCIlist(CIList* lst)
     lst->head = lst->tail = NULL;
 }
 
-int getConcertFromUser(Concert* concertp)
+int getConcertFromUser(Concert* concertp, InstrumentTree tr)
 {
     Concert con;
     int hh;
@@ -416,10 +416,23 @@ int getConcertFromUser(Concert* concertp)
     }
     scanf("%d %d %d %d:%d", &con.date_of_concert.day, &con.date_of_concert.month, &con.date_of_concert.year, &hh, &mm);
     con.date_of_concert.hour = (float)(hh + (mm / 60));
-    con.instruments = getInstrumtsList();
+    con.instruments = getInstrumentList(tr);
     *concertp = con;
 }
 
+CIList getInstrumentList(InstrumentTree tr)
+{
+    CIList lst;
+    makeEmptyCIlist(&lst);
+    ConcertInstrumentNode* cur;
+    cur = createNewListNode(NULL, tr);
+    while (cur != NULL)
+    {
+        insertCINodeToEndList(&lst, cur);
+        cur = createNewListNode(NULL, tr);
+    }
+    return lst;
+}
 /// <summary>
 /// get one name till white space
 /// </summary>
@@ -459,10 +472,70 @@ int getName(char* name)
 void GetConcertAndFindMusicians(InstrumentTree tr, Musician*** MuiciansCollection, int* IMSize)
 {
     Concert con;
-
-    while (getConcertFromUser(&con) != -1)
+    ConcertInstrumentNode* cur;
+    int ID;
+    int (*compare)(void*, void*, int id);
+    while (getConcertFromUser(&con, tr) != -1)
     {
-        
+        cur = con.instruments.head;
+        while (cur != NULL)
+        {
+            ID = cur->data.inst;
+            if (cur->data.num > IMSize[ID])
+            {
+                printf("Could not find musicians for the concert %s\n", con.name);
+            }
+            else
+            {
+                if (cur->data.importance == '0')
+                {
+                    compare = sortCheapestToExpensive;
+                    qsort(MuiciansCollection[ID], IMSize[ID], sizeof(Musician**), compare);
+                }
+                else
+                {
+                    compare = sortExpensiveToChepest;
+                    qsort(MuiciansCollection[ID], IMSize[ID], sizeof(Musician**), compare);
+                }
+
+            }
+
+        }
+
     }
     
+}
+int sortCheapestToExpensive(void* priceA, void* priceB,int id)
+{
+    Musician* A = (Musician*)priceA;
+    Musician* B = (Musician*)priceB;
+    if (getPriceForInstrument(id, A->instruments) > getPriceForInstrument(id, B->instruments))
+    {
+        return -1;
+    }
+    else
+        return 1;
+}
+int sortExpensiveToChepest(void* priceA, void* priceB, int id)
+{
+    Musician* A = (Musician*)priceA;
+    Musician* B = (Musician*)priceB;
+    if (getPriceForInstrument(id, A->instruments) > getPriceForInstrument(id, B->instruments))
+    {
+        return 1;
+    }
+    else
+        return -1;
+}
+int getPriceForInstrument(int insId, MPIlist musicianList)
+{
+    MPIlistNode* cur; 
+    cur = musicianList.head;
+    while (cur != NULL)
+    {
+        if (cur->data.insId == insId)
+            return cur->data.price;
+        else
+            cur = cur->next;
+    }
 }

@@ -83,6 +83,21 @@ Musician** createMusiciansQ4(Musician** MusiciansGroup, int musiArrSize, int ins
 void CreateMusiciansCollection(Musician** MusiciansGroup, int musiArrSize, InstrumentTree tr, Musician**** PMuiciansCollection);
 
 
+//Q5 functions//
+
+ConcertInstrumentNode* createNewListNode(ConcertInstrumentNode* next, InstrumentTree tr);
+void insertCINodeToEndList(CIList* lst, ConcertInstrumentNode* tail);
+bool isEmptyCIlist(CIList lst);
+void makeEmptyCIlist(CIList* lst);
+int getConcertFromUser(Concert* concertp, InstrumentTree tr);
+CIList getInstrumentList(InstrumentTree tr);
+int getName(char* name);
+void GetConcertAndFindMusicians(InstrumentTree tr, Musician*** MuiciansCollection, int* IMSize);
+int sortCheapestToExpensive(void* priceA, void* priceB, int id);
+int sortExpensiveToChepest(void* priceA, void* priceB, int id);
+int getPriceForInstrument(int insId, MPIlist musicianList);
+
+
 //Q5 structs//
 typedef struct
 {
