@@ -298,22 +298,25 @@ void makeEmptyMPIList(MPIlist* lst)
 }
 
 //Q4 functions//
-void CreateMusiciansCollection(Musician** MusiciansGroup, int musiArrSize, InstrumentTree tr, Musician**** PMuiciansCollection)
+void CreateMusiciansCollection(Musician** MusiciansGroup, int musiArrSize, InstrumentTree tr, Musician**** PMuiciansCollection, int ** IMArrSizeP)
 {
     int size, insId;
+    int* IMArrSize;
     Musician*** MusicianCollection;
     size = treeSize(tr.root);
     if (size == 0)
         return;
+    IMArrSize = (int*)malloc(sizeof(int) * size);
     MusicianCollection = (Musician***)malloc(sizeof(Musician**) * size);
     for (insId = 0; insId < size; insId++)
     {
-        MusicianCollection[insId] = createMusiciansQ4(MusiciansGroup, musiArrSize, insId);
+        MusicianCollection[insId] = createMusiciansQ4(MusiciansGroup, musiArrSize, insId, IMArrSize);
     }
     *PMuiciansCollection = MusicianCollection;
+    *IMArrSizeP = IMArrSize;
 }
 
-Musician** createMusiciansQ4(Musician** MusiciansGroup,int musiArrSize,int insId)
+Musician** createMusiciansQ4(Musician** MusiciansGroup,int musiArrSize,int insId, int* IMSize)
 {
     int i, counter = 0, holder;
     Musician** res;
@@ -322,6 +325,7 @@ Musician** createMusiciansQ4(Musician** MusiciansGroup,int musiArrSize,int insId
         counter += isPlaying(MusiciansGroup[i], insId);
     }
     res = (Musician**)malloc(sizeof(Musician*) * counter);
+    IMSize[insId] = counter;
     counter = 0;
     for ( i = 0; i < musiArrSize; i++)
     {
@@ -358,4 +362,107 @@ int treeSize(TreeNode* root)
 void checkIfWorks(int shit)
 {
     printf("do not work");
+}
+
+//Q5 functions//
+ConcertInstrumentNode* createNewListNode(ConcertInstrumentNode* next, InstrumentTree tr)
+{
+    ConcertInstrumentNode* res;
+    res = (ConcertInstrumentNode*)malloc(sizeof(ConcertInstrumentNode));
+    char* instruName = (char*)malloc(sizeof(char) * 4);
+    getName(instruName);
+    res->data.inst = findInsId(tr, instruName);
+    scanf("%d ", &(res->data.num));
+    res->data.importance = getchar();
+    res->next = next;
+    return res;
+}
+void insertCINodeToEndList(CIList* lst, ConcertInstrumentNode* tail)
+{
+    if (isEmptyCIlist(*lst) == true)
+        lst->head = lst->tail = tail;
+    else
+    {
+        lst->tail->next = tail;
+        lst->tail = tail;
+    }
+    tail->next = NULL;
+}
+bool isEmptyCIlist(CIList lst)
+{
+    if (lst.head == lst.tail == NULL)
+    {
+        return true;
+    }
+    else
+        return false;
+}
+void makeEmptyCIlist(CIList* lst)
+{
+    lst->head = lst->tail = NULL;
+}
+
+int getConcertFromUser(Concert* concertp)
+{
+    Concert con;
+    int hh;
+    int mm;
+    con.name = (char*)malloc(sizeof(char) * 4);
+    checkMemoryAllocation(con.name);
+    if (getName(&con.name) == -1)
+    {
+        free(con.name);
+        return -1;
+    }
+    scanf("%d %d %d %d:%d", &con.date_of_concert.day, &con.date_of_concert.month, &con.date_of_concert.year, &hh, &mm);
+    con.date_of_concert.hour = (float)(hh + (mm / 60));
+    con.instruments = getInstrumtsList();
+    *concertp = con;
+}
+
+/// <summary>
+/// get one name till white space
+/// </summary>
+/// <param name="name"> pointer to name with place for 4 chars</param>
+int getName(char* name)
+{
+    int psize = 4, logsize = 0, i = 0;
+    char c;
+    c = getchar();
+    if (c == '\n')
+    {
+        return -1;
+    }
+    while (c != ' ')
+    {
+        if (logsize < psize)
+        {
+            name[i] = c;
+            logsize++;
+        }
+        else
+        {
+            psize *= 2;
+            name = (char*)realloc(name, psize);
+            name[i] = c;
+        }
+        i++;
+        c = getchar();
+    }
+    name[i] = 0;
+    if (logsize < psize)
+    {
+        name = (char*)realloc(name, logsize + 1);
+    }
+    return 1;
+}
+void GetConcertAndFindMusicians(InstrumentTree tr, Musician*** MuiciansCollection, int* IMSize)
+{
+    Concert con;
+
+    while (getConcertFromUser(&con) != -1)
+    {
+        
+    }
+    
 }

@@ -8,7 +8,7 @@ void main(int argc, char* argv[])
     Musician** MusiciansGroup;
     Musician*** MuiciansCollection;
     int musiArrSize;
-    int size;
+    int size,*IMSize;
     char* MusicianFileName;
     char** Instu = GetInstrusFromFile(&size);
     tr = buildTree(Instu, size);
@@ -26,8 +26,10 @@ void main(int argc, char* argv[])
     //END OF Q3//
 
     //Q4//
-    CreateMusiciansCollection(MusiciansGroup, musiArrSize, tr, &MuiciansCollection);
+    CreateMusiciansCollection(MusiciansGroup, musiArrSize, tr, &MuiciansCollection, &IMSize);
 
+    //Q5//
+    GetConcertAndFindMusicians(tr, MuiciansCollection, IMSize);
 
 
 

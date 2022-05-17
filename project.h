@@ -82,4 +82,38 @@ int isPlaying(Musician* player, int insId);
 Musician** createMusiciansQ4(Musician** MusiciansGroup, int musiArrSize, int insId);
 void CreateMusiciansCollection(Musician** MusiciansGroup, int musiArrSize, InstrumentTree tr, Musician**** PMuiciansCollection);
 
+
+//Q5 structs//
+typedef struct
+{
+    int day, month, year;
+    float hour;
+} Date;
+typedef struct
+{
+    int num;
+    int inst;
+    char importance;
+}ConcertInstrument;
+
+typedef struct ConcertInstrumentNode
+{
+    ConcertInstrument data;
+    ConcertInstrumentNode* next;
+
+}ConcertInstrumentNode;
+typedef struct
+{
+    ConcertInstrumentNode* head;
+    ConcertInstrumentNode* tail;
+}CIList;
+
+typedef struct
+{
+    Date date_of_concert;
+    char* name;
+    CIList instruments;
+}Concert;
+
+
 #endif 
